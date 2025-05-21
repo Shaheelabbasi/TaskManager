@@ -11,7 +11,7 @@ import { TaskService } from './task/task.service';
 import { TaskModule } from './task/task.module';
 import { AuthController } from './auth/auth.controller';
 
-console.log("jwt here in app module is ",process.env.JWT_SECRET)
+
 @Module({
   imports: [
     ConfigModule.forRoot({

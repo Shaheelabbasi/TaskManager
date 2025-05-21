@@ -1,4 +1,4 @@
-import { Controller ,Post,UseGuards,Body, Get,Param,Patch, Delete,ValidationPipe} from '@nestjs/common';
+import { Controller ,Post,UseGuards,Body, Get,Param,Patch, Delete,ValidationPipe, Query, UsePipes} from '@nestjs/common';
 import { Task } from './task.entity';
 import { getRepositoryToken, InjectRepository } from '@nestjs/typeorm';
 import { TaskService } from './task.service';
@@ -6,6 +6,7 @@ import { AuthGuard } from 'src/auth/Guard/auth.guard';
 import { TaskDto } from './Dto/task.dto';
 import { CurrentUser } from 'src/auth/Decorator/current-user.decorator';
 import { UpdateTaskDto } from './Dto/updatetask.dto';
+import { PageOptionsDto } from 'common/dtos/page-options.dto';
 
 @Controller('task')
 export class TaskController {
@@ -23,8 +24,8 @@ export class TaskController {
     }
     @UseGuards(AuthGuard)
     @Get("all")
-    getAllTasks(@CurrentUser () user:any):Promise<Task[]>{
-      return this.taskService.getAllTasks(user)
+    getAllTasks(@Query() pageOptionsDto:PageOptionsDto,@CurrentUser () user:any):Promise<Task[]>{
+      return this.taskService.getAllTasks(pageOptionsDto,user)
     } 
     @UseGuards(AuthGuard)
 

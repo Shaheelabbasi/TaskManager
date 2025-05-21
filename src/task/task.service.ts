@@ -1,9 +1,12 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, Query, ValidationPipe } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Task } from './task.entity';
 import { TaskDto } from './Dto/task.dto';
 import { UpdateTaskDto } from './Dto/updatetask.dto';
+import { PageOptionsDto } from 'common/dtos/page-options.dto';
+import { PageMetaDto } from 'common/dtos/page-meta.dto';
+import { PaginatedResponse } from 'common/dtos/paginated-response.dto';
 
 @Injectable()
 export class TaskService {
@@ -15,13 +18,25 @@ private readonly taskRepo:Repository<Task>
 
    async Create(taskdto:TaskDto,user:any)
     {
-        console.log("user received here in task service is ",user)
    return this.taskRepo.save({...taskdto,user:user.id})
+
+   
     }
 
-  async  getAllTasks(user:any):Promise<Task[]>{
-        console.log("user received here is ",user)
-      return this.taskRepo.find({where: { user: user.id }})
+  async  getAllTasks(pageOptionsDto:PageOptionsDto,user:any):Promise<any>{
+
+      const queryBuilder =  this.taskRepo.createQueryBuilder("task")
+      queryBuilder
+      .where("task.userId = :userId", { userId: user.id })
+      .skip((pageOptionsDto.page-1 ) * pageOptionsDto.take)
+      .take(pageOptionsDto.take)
+      ;
+
+      const itemCount=await queryBuilder.getCount()
+      const {entities}=await queryBuilder.getRawAndEntities()
+      
+      const pageMeta=new PageMetaDto({itemCount, pageOptionsDto})
+     return  new PaginatedResponse(entities,pageMeta)
      
 
     } 

@@ -12,7 +12,9 @@ export const AppDataSource=new DataSource({
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     entities: [__dirname + '/../**/*.entity.{js,ts}'],
-    //migrations: ['dist/src/migrations/*.js'],
-    synchronize: true,
+    migrations: ['dist/src/migrations/*.js'],
+    //control the changes in the database through migrations
+    // if true automtically syncs with the database
+    synchronize: false,
 })
 
