@@ -8,7 +8,7 @@ async function bootstrap() {
 
  app.useGlobalPipes( new ValidationPipe({
   transform:true,
-  forbidNonWhitelisted:true
+  //forbidNonWhitelisted:true
  }))
   const config = new DocumentBuilder()
     .setTitle('Task Manager')

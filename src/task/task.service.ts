@@ -69,4 +69,10 @@ private readonly taskRepo:Repository<Task>
         const Isdeleted=await this.taskRepo.delete(taskId)
         return Isdeleted
     }
+
+    async Searchtask(title:string){
+     console.log("service call reached")
+     // return this.taskRepo.findOne({where:{title:title}})
+      
+    }
 }

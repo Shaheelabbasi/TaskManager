@@ -7,7 +7,7 @@ import { TaskDto } from './Dto/task.dto';
 import { CurrentUser } from 'src/auth/Decorator/current-user.decorator';
 import { UpdateTaskDto } from './Dto/updatetask.dto';
 import { PageOptionsDto } from 'common/dtos/page-options.dto';
-
+import { SearchTaskDto } from './Dto/searchtask.dto';
 @Controller('task')
 export class TaskController {
 
@@ -53,6 +53,14 @@ export class TaskController {
         status:200,
         message:"deleted successfully"
     }
+
+    
+    }
+    @UseGuards(AuthGuard)
+    @Get("s")
+    async SearchTask(@Query () searchTaskDto:SearchTaskDto){
+     console.log("I m cld ")
+   return  this.taskService.Searchtask(searchTaskDto.title)
     }
 }
 
